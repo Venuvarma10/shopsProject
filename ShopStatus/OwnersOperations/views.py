@@ -19,7 +19,7 @@ class Registration(APIView):
             "first_name":data["firstName"],
             "last_name":data["lastName"],
             "username":data["mobileNumber"],
-            "password":data[" password"]
+            "password":data["password"]
         }
         serializer = RegistrationSerializer(data=user_data)
         if serializer.is_valid():
