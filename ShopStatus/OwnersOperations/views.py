@@ -67,6 +67,7 @@ class ShopDetailsListCreateView(generics.ListCreateAPIView):
     
     def create(self, request, *args, **kwargs):
         """Custom create method to handle multiple image uploads"""
+        print(request.data)
         shop_serializer = ShopDetailsSerializer(data=request.data)
         if shop_serializer.is_valid():
             shop = shop_serializer.save(owner=self.request.user)  # Save shop details

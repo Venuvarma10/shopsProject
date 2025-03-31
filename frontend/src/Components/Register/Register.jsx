@@ -42,28 +42,45 @@ const Register = () => {
 
   const registerUser=async()=>{
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/Register/", {
+      const response = await fetch("http://127.0.0.1:8000/api/register/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData) 
       });
+      const new_data = await response.json();
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const new_data = await response.json();
-        console.log(new_data);
-        return {username: formData.username};
+      if (!response.ok) {
+          throw new Error(new_data.username[0]);
+      }
+
+      const response1 = await fetch("http://127.0.0.1:8000/api/token/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({...formData,username:formData.mobileNumber}) //used pre-build token generator in backend that's why i am putting username here
+      });
+      const new_data1 = await response1.json();
+      if (!response1.ok) {
+        
+        throw new Error(new_data1.detail);
+      }
+      console.log(new_data1);
+      return true;
     } catch (error) {
-        alert('Invalid username or password');
+        alert(error.message);
     }
   }
 
   const handleSubmit=(e)=>{
     e.preventDefault();
-    registerUser();
+    if(formData.firstName && formData.lastName && formData.mobileNumber && formData.password && formData.confirmPassword===formData.password){
+      registerUser();
+    }else{
+      alert("Require All Fields")
+    }
     console.log(formData);
   }
 

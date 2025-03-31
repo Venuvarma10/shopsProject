@@ -73,31 +73,35 @@ const ShopRegister = () => {
           formData.append("images", image);
         });
         formData.append("shopDaysOpen", JSON.stringify(shopForm.shopDaysOpen));
-        formData.append("shopAddress", JSON.stringify(shopForm.shopAddress));
-
+        formData.append("address", JSON.stringify(shopForm.shopAddress.address));
+        formData.append("state", JSON.stringify(shopForm.shopAddress.state));
+        formData.append("city", JSON.stringify(shopForm.shopAddress.city));
+        formData.append("country", JSON.stringify(shopForm.shopAddress.country));
+        formData.append("pincode", JSON.stringify(shopForm.shopAddress.pincode));
+        
         try {
-          const response = await fetch("#", {
+          const response = await fetch("http://127.0.0.1:8000/api/shop_create_view/", {
             method: "POST",
             headers:{
-              "Content-Type": "application/json",
+              // "Authorization": "Bearer "+localStorage.getItem("token")
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTM4MDA5LCJpYXQiOjE3NDM0MTkyMDksImp0aSI6ImI5MjI1NGMxNDFmMTRlYWI5OGQzN2IxNzhlMmE5ZjllIiwidXNlcl9pZCI6MX0.zivoIZHPHSvRenCbekHRbnj7WygTonjbQiuoLygk_lw",
             },
             body: formData,
           });
-      
-          if (response.ok) {
-            alert("Shop registered successfully!");
-          } else {
-            alert("Failed to register shop.");
-          }
+          const data=await response.json();
+          console.log(data);
+          if (!response.ok) {
+            throw new Error(data.details);
+          } 
         } catch (error) {
-          console.error("Error submitting form:", error);
+          console.error("Error submitting form:", error.message);
         }
       }
     }
 
   return (
     <div className='flex flex-col justify-center items-center w-full my-10'>
-        <div className='border-1 rounded-[10px] text-center'>
+        <div className='border-1 rounded-[10px] text-center p-10'>
           <h2 className='text-[28px] text-blue-700 font-bold mt-4'>Shop Register</h2>
           <form onSubmit={handleSubmit} onChange={handleChange} >
             {slides[activeSlide]}
@@ -105,7 +109,7 @@ const ShopRegister = () => {
               <div className='flex justify-between w-100'>
                   <button className={`submit-button ${activeSlide==0?"invisible":"block"}`} onClick={prevSlide}>Prev</button>
                   <button className={`submit-button ${activeSlide==slides.length-1?"hidden":"block"} `} onClick={nextSlide}>Next</button>
-                  <button className={`submit-button ${activeSlide!=slides.length-1?"hidden":"block"} `}>Submit</button>
+                  <button type='submit' className={`submit-button ${activeSlide!=slides.length-1?"hidden":"block"} `}>Submit</button>
               </div>
           </div>
           </form>
