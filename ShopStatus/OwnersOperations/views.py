@@ -32,7 +32,7 @@ class Registration(APIView):
                 #     # "token": token.key,
                 #     "id":serializer.data['id']
                 # }
-                "message":"Successfully Registered"
+                "message":"Successfully Registered","name": user.get_full_name()
                 }, status=201)
         return Response(serializer.errors, status=400)
 
@@ -42,13 +42,16 @@ class Login(APIView):
     def post(self, request):
         username = request.data.get('mobile_numer')
         password = request.data.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
+        try :
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"detail": "Invalid username"}, status=400)
+        if user.check_password(password):
             # token, created = Token.objects.get_or_create(user=user)
             return Response({"name": user.get_full_name(),
                             #  "token": token.key
                              }, status=202)
-        return Response({"message": "Invalid credentials"}, status=401)
+        return Response({"detail": "Invalid password"}, status=401)
 
 
 class ShopDetailsListCreateView(generics.ListCreateAPIView):
