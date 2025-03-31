@@ -42,7 +42,7 @@ const Register = () => {
 
   const registerUser=async()=>{
     try {
-      const response = await fetch(LOGIN_API, {
+      const response = await fetch("http://127.0.0.1:8000/api/Register/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -54,7 +54,8 @@ const Register = () => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const new_data = await response.json();
-        return {username: formData.username, token: new_data.token};
+        console.log(new_data);
+        return {username: formData.username};
     } catch (error) {
         alert('Invalid username or password');
     }
