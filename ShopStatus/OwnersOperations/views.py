@@ -15,7 +15,13 @@ class Registration(APIView):
     permission_classes=[AllowAny]
     def post(self, request):
         data = request.data
-        serializer = RegistrationSerializer(data=data)
+        user_data={
+            "first_name":data["firstName"],
+            "last_name":data["lastName"],
+            "username":data["mobileNumber"],
+            "password":data[" password"]
+        }
+        serializer = RegistrationSerializer(data=user_data)
         if serializer.is_valid():
             user = serializer.save()
             # token = Token.objects.create(user=user)
@@ -34,7 +40,7 @@ class Registration(APIView):
 class Login(APIView):
     permission_classes=[AllowAny]
     def post(self, request):
-        username = request.data.get('username')
+        username = request.data.get('mobile_numer')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
         if user:
