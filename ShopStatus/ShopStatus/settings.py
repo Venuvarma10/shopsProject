@@ -145,3 +145,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=33),  # Refresh token valid for 7 days
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173"  
+]
+
