@@ -73,18 +73,18 @@ const ShopRegister = () => {
           formData.append("images", image);
         });
         formData.append("shopDaysOpen", JSON.stringify(shopForm.shopDaysOpen));
-        formData.append("address", JSON.stringify(shopForm.shopAddress.address));
-        formData.append("state", JSON.stringify(shopForm.shopAddress.state));
-        formData.append("city", JSON.stringify(shopForm.shopAddress.city));
-        formData.append("country", JSON.stringify(shopForm.shopAddress.country));
-        formData.append("pincode", JSON.stringify(shopForm.shopAddress.pincode));
+        formData.append("address", shopForm.shopAddress.address);
+        formData.append("state", shopForm.shopAddress.state);
+        formData.append("city", shopForm.shopAddress.city);
+        formData.append("country", shopForm.shopAddress.country);
+        formData.append("pincode", shopForm.shopAddress.pincode);
         
         try {
           const response = await fetch("http://127.0.0.1:8000/api/shop_create_view/", {
             method: "POST",
             headers:{
               // "Authorization": "Bearer "+localStorage.getItem("token")
-              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTM4MDA5LCJpYXQiOjE3NDM0MTkyMDksImp0aSI6ImI5MjI1NGMxNDFmMTRlYWI5OGQzN2IxNzhlMmE5ZjllIiwidXNlcl9pZCI6MX0.zivoIZHPHSvRenCbekHRbnj7WygTonjbQiuoLygk_lw",
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQzNTA0LCJpYXQiOjE3NDM0MjQ3MDQsImp0aSI6IjY5MzBjZWNhYTQ4MDQ2YjI4YTRlYzQ4MTA4MmQ2OTczIiwidXNlcl9pZCI6MX0._2DlNyefzVG9tNjtxkls7nWEjkqOYYzXpuejrkoEhYM",
             },
             body: formData,
           });

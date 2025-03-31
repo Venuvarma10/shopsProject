@@ -34,7 +34,7 @@ const Login = () => {
         
         throw new Error(new_data1.detail);
       }
-      console.log(new_data1);
+      console.log(new_data1.access);
     } catch (error) {
         alert(error.message);
     }

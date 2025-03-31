@@ -63,7 +63,10 @@ class ShopDetailsListCreateView(generics.ListCreateAPIView):
     
     def get_queryset(self):
         # print('user',self.request.user)
-        return ShopDetails.objects.filter(owner=self.request.user)
+        details =ShopDetails.objects.filter(owner=self.request.user)
+        serializer = ShopDetailsSerializer(details,many=True)
+        print(serializer.data)
+        return details
     
     def create(self, request, *args, **kwargs):
         """Custom create method to handle multiple image uploads"""
