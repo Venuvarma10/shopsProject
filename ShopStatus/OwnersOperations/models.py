@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class ShopDetails(models.Model):
-    name = models.TextField()
+    shopName = models.TextField()
     address = models.TextField()
     state = models.TextField()
     city = models.TextField()
@@ -14,10 +14,10 @@ class ShopDetails(models.Model):
     category = models.TextField()
     # services=models.JSONField(default=list,null=True)
     owner=models.ForeignKey(User,on_delete=models.CASCADE)
-    openingtime=models.TextField()
-    closingtime=models.TextField()
+    openingTime=models.TextField()
+    closingTime=models.TextField()
     Status=models.BooleanField(default=False)
-    worikingdays=models.JSONField(null=True)
+    shopDaysOpen=models.JSONField(null=True)
     # location = models.PointField()
    
 

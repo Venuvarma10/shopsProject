@@ -80,7 +80,7 @@ class ShopDetailsListCreateView(generics.ListCreateAPIView):
 
 
 class ShopUpdateView(generics.UpdateAPIView):
-    permission_classes = [ IsAuthenticated]
+    permission_classes = [ IsAuthenticated,IsAdminUser]
     # queryset = ShopDetails.objects.all()
     serializer_class = ShopDetailsSerializer
     lookup_field = 'pk'  
