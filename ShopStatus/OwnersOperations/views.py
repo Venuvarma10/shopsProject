@@ -40,12 +40,12 @@ class Registration(APIView):
 class Login(APIView):
     permission_classes=[AllowAny]
     def post(self, request):
-        username = request.data.get('mobile_numer')
+        username = request.data.get('mobileNumber')
         password = request.data.get('password')
         try :
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            return Response({"detail": "Invalid username"}, status=400)
+            return Response({"detail": "Invalid mobiel number"}, status=400)
         if user.check_password(password):
             # token, created = Token.objects.get_or_create(user=user)
             return Response({"name": user.get_full_name(),
