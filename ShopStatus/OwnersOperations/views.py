@@ -75,7 +75,7 @@ class ShopDetailsListCreateView(generics.ListCreateAPIView):
         if shop_serializer.is_valid():
             shop = shop_serializer.save(owner=self.request.user)  # Save shop details
              # Handle multiple image uploads
-            images = request.data['images'] 
+            images = request.FILES.getlist('images')
             print(images) 
             for image in images:
                 ShopImages.objects.create(shop=shop, image=image)
@@ -100,6 +100,15 @@ class ShopUpdateDestroyRetriveView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return ShopDetails.objects.filter(owner=self.request.user)
+    
+    def delete(self):
+        instance = self.get_object()
+        data=ShopDetails.objects.filter(owner=self.request.user)
+        data = ShopDetailsSerializer(data,many=True)
+        if data:
+            instance.delete()
+            return Response({"shops":data.data}, status=200)
+        return Response({"error":data.errors}, status=400)
    
 
 # class ShopImageListCreateView(generics.ListCreateAPIView):
@@ -108,7 +117,8 @@ class ShopUpdateDestroyRetriveView(generics.RetrieveUpdateDestroyAPIView):
 
     
 
-#     def create(self, request, *args, **kwargs):
+#     def create(self, request, *args, **kwargs):git log
+
 #         """Custom create method to allow multiple images upload"""
 #         shop_id = request.data.get('shop')
 #         images = request.FILES.getlist('images')
