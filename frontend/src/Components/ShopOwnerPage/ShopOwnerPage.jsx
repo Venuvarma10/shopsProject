@@ -52,10 +52,11 @@ const ShopOwnerPage = () => {
         getData();
     }, []);
 
+    console.log(shopDetails);
     return (
         <div className='flex justify-center items-center mt-5'>
             <div className='p-5 border'>
-                <BannerSlider images={images} />
+                <BannerSlider images={shopDetails[activeSlide]?.images} />
                 {shopDetails.length > 0 && (
                     <>
                         <div className='flex justify-between items-center mt-5'>

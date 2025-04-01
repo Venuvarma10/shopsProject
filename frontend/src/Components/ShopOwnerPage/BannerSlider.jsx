@@ -6,7 +6,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const BannerSlider = ({images}) => {
-  console.log(images)
   return (
     <div className="w-100 mx-auto my-1 rounded-[15px] overflow-hidden shadow-md">
       <Swiper
@@ -21,7 +20,7 @@ const BannerSlider = ({images}) => {
         {images.length > 0 ? (
           images.map((img, index) => (
             <SwiperSlide key={index}>
-              <img src={img} alt={`Banner ${index + 1}`} className="w-full  object-cover rounded-[10px]" />
+              <img src={img.image} alt={`Banner ${index + 1}`} className="w-full  object-cover rounded-[10px]" />
             </SwiperSlide>
           ))
         ) : (
