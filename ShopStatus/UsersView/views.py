@@ -25,6 +25,10 @@ class ShopDetailsView(generics.ListAPIView):
 
     #         return Response({"message": "Shop and images added successfully"}, status=201)
     #     return Response(shop_serializer.errors, status=401)
+class ShopRetriveView(generics.RetrieveAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ShopDetailsSerializer
+    lookup_field = 'pk'
 
 
 class SearchByCategory(generics.ListAPIView):
@@ -46,3 +50,4 @@ class SearchByCategory(generics.ListAPIView):
         elif pincode:
             return queryset.filter(pincode=pincode)
         return queryset
+    
