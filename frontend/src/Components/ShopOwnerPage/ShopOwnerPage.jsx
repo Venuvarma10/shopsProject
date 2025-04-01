@@ -1,90 +1,122 @@
-import React, { useState, useEffect } from 'react';
-import { assets } from '../../assets/assets.js';
+import React, { useState, useEffect } from "react";
 import { IoLocation } from "react-icons/io5";
 import { FaClock } from "react-icons/fa6";
-import BannerSlider from './BannerSlider.jsx';
+import BannerSlider from "./BannerSlider.jsx";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
 const ShopOwnerPage = () => {
-    const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQzNTA0LCJpYXQiOjE3NDM0MjQ3MDQsImp0aSI6IjY5MzBjZWNhYTQ4MDQ2YjI4YTRlYzQ4MTA4MmQ2OTczIiwidXNlcl9pZCI6MX0._2DlNyefzVG9tNjtxkls7nWEjkqOYYzXpuejrkoEhYM";
-    const [shopDetails, setShopDetails] = useState([]);
-    const [activeSlide, setActiveSlide] = useState(0);
-    const [status, setStatus] = useState(false);
-    const { shopimg } = assets;
-    const images = [shopimg, shopimg, shopimg, shopimg];
+  const [shopDetails, setShopDetails] = useState([]);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [status, setStatus] = useState(false);
 
-    const handleClick = () => {
-        setStatus(!status);
-    };
+  const handleClick = () => {
+    setStatus(!status);
+  };
 
-    const handleClickNext = () => {
-        if (activeSlide < shopDetails.length - 1) {
-            setActiveSlide(activeSlide + 1);
+  const handleClickNext = () => {
+    if (activeSlide < shopDetails.length - 1) {
+      setActiveSlide(activeSlide + 1);
+    }
+  };
+
+  const handleClickPrev = () => {
+    if (activeSlide > 0) {
+      setActiveSlide(activeSlide - 1);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Secure token retrieval
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/shop_create_view/",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQzNTA0LCJpYXQiOjE3NDM0MjQ3MDQsImp0aSI6IjY5MzBjZWNhYTQ4MDQ2YjI4YTRlYzQ4MTA4MmQ2OTczIiwidXNlcl9pZCI6MX0._2DlNyefzVG9tNjtxkls7nWEjkqOYYzXpuejrkoEhYM`,
+          },
         }
-    };
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.details);
+      }
+      setShopDetails([...data]);
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
 
-    const handleClickPrev = () => {
-        if (activeSlide > 0) {
-            setActiveSlide(activeSlide - 1);
-        }
-    };
+  useEffect(() => {
+    getData();
+  }, []);
 
-    const getData = async () => {
-        try {
-            const token = localStorage.getItem("token"); // Secure token retrieval
-            const response = await fetch("http://127.0.0.1:8000/api/shop_create_view/", {
-                method: "GET",
-                headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQ4NTg1LCJpYXQiOjE3NDM0Mjk3ODUsImp0aSI6IjUxOGE3ZTBiZDRhZDQyMzI4YTIyYWQxYjk2ZmU4ZDAwIiwidXNlcl9pZCI6MX0.7LrEZOpue_DSHjr_MV37z_k0HoEZU4V6B41KfmgT_7I",
-                },
-            });
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.details);
-            }
-            setShopDetails([...data]);
-        } catch (error) {
-            console.error("Error fetching data:", error.message);
-        }
-    };
-
-    useEffect(() => {
-        getData();
-    }, []);
-
-    return (
-        <div className='flex justify-center items-center mt-5'>
-            <div className='p-5 border'>
-                <BannerSlider images={images} />
-                {shopDetails.length > 0 && (
-                    <>
-                        <div className='flex justify-between items-center mt-5'>
-                            <p className='text-2xl font-bold'>{shopDetails[activeSlide]?.shopName}</p>
-                            <div className='flex items-center justify-between w-[35%]'>
-                                <button className='edit-delete'>Edit</button>
-                                <button className='edit-delete'>Delete</button>
-                            </div>
-                        </div>
-                        <p className='p font-bold'>{shopDetails[activeSlide]?.owner_name}</p>
-                        <p className='p w-100'>
-                            <IoLocation className='inline pr-1 text-2xl relative bottom-0.5' />
-                            {shopDetails[activeSlide]?.address}, {shopDetails[activeSlide]?.city}, {shopDetails[activeSlide]?.state}, {shopDetails[activeSlide]?.country}, {shopDetails[activeSlide]?.pincode}
-                        </p>
-                        <p className='p'>
-                            <FaClock className='inline pr-1 text-[22px] relative bottom-0.5' />
-                            {shopDetails[activeSlide]?.openingTime} - {shopDetails[activeSlide]?.closingTime}
-                        </p>
-                    </>
-                )}
-
-                <div className='flex justify-between items-center mt-8'>
-                    <button className={`edit-delete text-[26px] ${shopDetails.length === 1 || activeSlide === 0 ? "invisible" : "block"}`} name="prev" onClick={handleClickPrev}><HiArrowSmLeft /></button>
-                    <button className='edit-delete' name='open/close' onClick={handleClick}>{status ? "Open" : "Close"}</button>
-                    <button className={`edit-delete text-[26px] ${activeSlide === shopDetails.length - 1 ? "invisible" : "block"}`} name="next" onClick={handleClickNext}><HiArrowSmRight /></button>
-                </div>
+  return (
+    <div className="flex justify-center items-center mt-5">
+      <div className="p-5 border">
+        <BannerSlider images={shopDetails[activeSlide]?.images.map(img => img.image)} />
+        {shopDetails.length > 0 && (
+          <>
+            <div className="flex justify-between items-center mt-5">
+              <p className="text-2xl font-bold">
+                {shopDetails[activeSlide]?.shopName}
+              </p>
+              <div className="flex items-center justify-between w-[35%]">
+                <button className="edit-delete">Edit</button>
+                <button className="edit-delete">Delete</button>
+              </div>
             </div>
+            <p className="p font-bold">
+              {shopDetails[activeSlide]?.owner_name}
+            </p>
+            <p className="p w-100">
+              <IoLocation className="inline pr-1 text-2xl relative bottom-0.5" />
+              {shopDetails[activeSlide]?.address},{" "}
+              {shopDetails[activeSlide]?.city},{" "}
+              {shopDetails[activeSlide]?.state},{" "}
+              {shopDetails[activeSlide]?.country},{" "}
+              {shopDetails[activeSlide]?.pincode}
+            </p>
+            <p className="p">
+              <FaClock className="inline pr-1 text-[22px] relative bottom-0.5" />
+              {shopDetails[activeSlide]?.openingTime} -{" "}
+              {shopDetails[activeSlide]?.closingTime}
+            </p>
+          </>
+        )}
+
+        <div className="flex justify-between items-center mt-8">
+          <button
+            className={`edit-delete text-[26px] ${
+              shopDetails.length === 1 || activeSlide === 0
+                ? "invisible"
+                : "block"
+            }`}
+            name="prev"
+            onClick={handleClickPrev}
+          >
+            <HiArrowSmLeft />
+          </button>
+          <button
+            className="edit-delete"
+            name="open/close"
+            onClick={handleClick}
+          >
+            {status ? "Open" : "Close"}
+          </button>
+          <button
+            className={`edit-delete text-[26px] ${
+              activeSlide === shopDetails.length - 1 ? "invisible" : "block"
+            }`}
+            name="next"
+            onClick={handleClickNext}
+          >
+            <HiArrowSmRight />
+          </button>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default ShopOwnerPage;
