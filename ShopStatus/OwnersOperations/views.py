@@ -105,7 +105,7 @@ class ShopUpdateDestroyRetriveView(generics.RetrieveUpdateDestroyAPIView):
         if not instance:
             return Response({"error": "Shop not found"}, status=404)
         data=ShopDetails.objects.filter(owner=self.request.user)
-        data = ShopDetailsSerializer(data,many=True,)
+        data = ShopDetailsSerializer(data,many=True,context={"request": request})
         if data:
             instance.delete()
             return Response({"shops":data.data}, status=200)
