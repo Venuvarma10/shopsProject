@@ -84,7 +84,7 @@ const ShopRegister = () => {
             method: "POST",
             headers:{
               // "Authorization": "Bearer "+localStorage.getItem("token")
-              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQzNTA0LCJpYXQiOjE3NDM0MjQ3MDQsImp0aSI6IjY5MzBjZWNhYTQ4MDQ2YjI4YTRlYzQ4MTA4MmQ2OTczIiwidXNlcl9pZCI6MX0._2DlNyefzVG9tNjtxkls7nWEjkqOYYzXpuejrkoEhYM",
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQ4NTg1LCJpYXQiOjE3NDM0Mjk3ODUsImp0aSI6IjUxOGE3ZTBiZDRhZDQyMzI4YTIyYWQxYjk2ZmU4ZDAwIiwidXNlcl9pZCI6MX0.7LrEZOpue_DSHjr_MV37z_k0HoEZU4V6B41KfmgT_7I",
             },
             body: formData,
           });
@@ -107,9 +107,9 @@ const ShopRegister = () => {
             {slides[activeSlide]}
             <div className='flex justify-center items-center mb-4'>
               <div className='flex justify-between w-100'>
-                  <button className={`submit-button ${activeSlide==0?"invisible":"block"}`} onClick={prevSlide}>Prev</button>
-                  <button className={`submit-button ${activeSlide==slides.length-1?"hidden":"block"} `} onClick={nextSlide}>Next</button>
-                  <button type='submit' className={`submit-button ${activeSlide!=slides.length-1?"hidden":"block"} `}>Submit</button>
+                  <button type="button" className={`submit-button ${activeSlide==0?"invisible":"block"}`} onClick={prevSlide}>Prev</button>
+                  <button type="button" className={`submit-button ${activeSlide==slides.length-1?"hidden":"block"} `} onClick={nextSlide}>Next</button>
+                  <button type='submit' className={`submit-button ${activeSlide!=slides.length-1?"hidden":"block"} `} >Submit</button>
               </div>
           </div>
           </form>
