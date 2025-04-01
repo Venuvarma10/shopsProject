@@ -75,7 +75,7 @@ const ShopOwnerPage = () => {
     const deleteShop = async () => {
         try {
             const token = localStorage.getItem("token"); // Secure token retrieval
-            const response = await fetch(`http://127.0.0.1:8000/api/shop_update_mixin/${shopDetails[activeSlide].id}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/shop_update_mixin/${shopDetails[activeSlide].id}/`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
@@ -85,7 +85,10 @@ const ShopOwnerPage = () => {
             if (!response.ok) {
                 throw new Error(data.details);
             }
-            setShopDetails([...data]);
+            // Update state with the new list of shops
+            setShopDetails([...data.shops]);
+            console.log("Updated shopDetails after delete:", data.shops); // Log the updated shop details
+            setActiveSlide(0);
         } catch (error) {
             console.error("Error fetching data:", error.message);
         }
@@ -95,8 +98,7 @@ const ShopOwnerPage = () => {
         getData();
     }, []);
 
-    console.log(shopDetails)
-    
+
     return (
         <div className='flex justify-center items-center mt-5'>
             <div className='p-5 border'>

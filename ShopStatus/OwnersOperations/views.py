@@ -100,8 +100,10 @@ class ShopUpdateDestroyRetriveView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return ShopDetails.objects.filter(owner=self.request.user)
     
-    def delete(self):
-        instance = self.get_object()
+    def delete(self,request,*args,**kwargs):
+        instance = ShopDetails.objects.filter(pk=self.kwargs['pk'], owner=self.request.user).first()
+        if not instance:
+            return Response({"error": "Shop not found"}, status=404)
         data=ShopDetails.objects.filter(owner=self.request.user)
         data = ShopDetailsSerializer(data,many=True)
         if data:
