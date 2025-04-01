@@ -1,33 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { assets } from '../../assets/assets.js';
+import React, { useState, useEffect } from "react";
 import { IoLocation } from "react-icons/io5";
 import { FaClock } from "react-icons/fa6";
-import BannerSlider from './BannerSlider.jsx';
+import BannerSlider from "./BannerSlider.jsx";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
 const ShopOwnerPage = () => {
-    const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQzNTA0LCJpYXQiOjE3NDM0MjQ3MDQsImp0aSI6IjY5MzBjZWNhYTQ4MDQ2YjI4YTRlYzQ4MTA4MmQ2OTczIiwidXNlcl9pZCI6MX0._2DlNyefzVG9tNjtxkls7nWEjkqOYYzXpuejrkoEhYM";
-    const [shopDetails, setShopDetails] = useState([]);
-    const [activeSlide, setActiveSlide] = useState(0);
-    const [status, setStatus] = useState(false);
-    const { shopimg } = assets;
-    const images = [shopimg, shopimg, shopimg, shopimg];
+  const [shopDetails, setShopDetails] = useState([]);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [status, setStatus] = useState(false);
 
-    const handleClick = () => {
-        setStatus(!status);
-    };
+  const handleClick = () => {
+    setStatus(!status);
+  };
 
-    const handleClickNext = () => {
-        if (activeSlide < shopDetails.length - 1) {
-            setActiveSlide(activeSlide + 1);
-        }
-    };
+  const handleClickNext = () => {
+    if (activeSlide < shopDetails.length - 1) {
+      setActiveSlide(activeSlide + 1);
+    }
+  };
 
-    const handleClickPrev = () => {
-        if (activeSlide > 0) {
-            setActiveSlide(activeSlide - 1);
-        }
-    };
+  const handleClickPrev = () => {
+    if (activeSlide > 0) {
+      setActiveSlide(activeSlide - 1);
+    }
+  };
 
     const getData = async () => {
         try {
@@ -35,7 +31,7 @@ const ShopOwnerPage = () => {
             const response = await fetch("http://127.0.0.1:8000/api/shop_create_view/", {
                 method: "GET",
                 headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQ4NTg1LCJpYXQiOjE3NDM0Mjk3ODUsImp0aSI6IjUxOGE3ZTBiZDRhZDQyMzI4YTIyYWQxYjk2ZmU4ZDAwIiwidXNlcl9pZCI6MX0.7LrEZOpue_DSHjr_MV37z_k0HoEZU4V6B41KfmgT_7I",
                 },
             });
             const data = await response.json();
@@ -48,15 +44,14 @@ const ShopOwnerPage = () => {
         }
     };
 
-    useEffect(() => {
-        getData();
-    }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
-    console.log(shopDetails[0]?.images[0]?.image);
     return (
         <div className='flex justify-center items-center mt-5'>
             <div className='p-5 border'>
-                {shopDetails[0]?.images && <BannerSlider images={shopDetails[activeSlide]?.images} />}
+                <BannerSlider images={images} />
                 {shopDetails.length > 0 && (
                     <>
                         <div className='flex justify-between items-center mt-5'>

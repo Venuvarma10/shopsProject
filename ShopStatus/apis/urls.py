@@ -19,7 +19,8 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Login (get token)
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh token
     path('shop_update_mixin/<int:pk>/',ShopUpdateDestroyRetriveView.as_view()),
-]
+]#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+ 
