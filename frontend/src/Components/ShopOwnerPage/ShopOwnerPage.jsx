@@ -6,12 +6,7 @@ import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
 const ShopOwnerPage = () => {
     const [shopDetails, setShopDetails] = useState([]);
-    const [activeSlide, setActiveSlide] = useState(0);
-    const [status, setStatus] = useState(false);
-
-    const handleClick = () => {
-        setStatus(!status);
-    };
+    const [activeSlide, setActiveSlide] = useState(0);    
 
     const handleClickNext = () => {
         if (activeSlide < shopDetails.length - 1) {
@@ -44,9 +39,64 @@ const ShopOwnerPage = () => {
         }
     };
 
+    const handleClick = () => {
+        updateStatus();
+    };
+
+    const updateStatus = async () => {
+        try {
+            const token = localStorage.getItem("token"); // Secure token retrieval
+            const response = await fetch(`http://127.0.0.1:8000/api/shop_update_mixin/${shopDetails[activeSlide].id}/`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
+                },
+                body: JSON.stringify({ Status: !shopDetails[activeSlide].Status }),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.details);
+            }
+            setShopDetails((prev) =>
+                prev.map((shop, index) =>
+                    index === activeSlide ? { ...shop, Status: !shop.Status } : shop
+                )
+            );
+        } catch (error) {
+            console.error("Error fetching data:", error.message);
+        }
+    };
+
+    const handleDelete = () => {
+        deleteShop();
+    }
+
+    const deleteShop = async () => {
+        try {
+            const token = localStorage.getItem("token"); // Secure token retrieval
+            const response = await fetch(`http://127.0.0.1:8000/api/shop_update_mixin/${shopDetails[activeSlide].id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
+                },
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.details);
+            }
+            setShopDetails([...data]);
+        } catch (error) {
+            console.error("Error fetching data:", error.message);
+        }
+    };
+
     useEffect(() => {
         getData();
     }, []);
+
+    console.log(shopDetails)
+    
     return (
         <div className='flex justify-center items-center mt-5'>
             <div className='p-5 border'>
@@ -56,8 +106,8 @@ const ShopOwnerPage = () => {
                         <div className='flex justify-between items-center mt-5'>
                             <p className='text-2xl font-bold'>{shopDetails[activeSlide]?.shopName}</p>
                             <div className='flex items-center justify-between w-[35%]'>
-                                <button className='edit-delete'>Edit</button>
-                                <button className='edit-delete'>Delete</button>
+                                <button className='edit-delete' >Edit</button>
+                                <button className='edit-delete' onClick={handleDelete}>Delete</button>
                             </div>
                         </div>
                         <p className='p font-bold'>{shopDetails[activeSlide]?.owner_name}</p>
@@ -74,7 +124,7 @@ const ShopOwnerPage = () => {
 
                 <div className='flex justify-between items-center mt-8'>
                     <button className={`edit-delete text-[26px] ${shopDetails.length === 1 || activeSlide === 0 ? "invisible" : "block"}`} name="prev" onClick={handleClickPrev}><HiArrowSmLeft /></button>
-                    <button className='edit-delete' name='open/close' onClick={handleClick}>{status ? "Open" : "Close"}</button>
+                    <button className='edit-delete' name='open/close' onClick={handleClick}>{shopDetails[activeSlide]?.Status ? "Close" : "Open"}</button>
                     <button className={`edit-delete text-[26px] ${activeSlide === shopDetails.length - 1 ? "invisible" : "block"}`} name="next" onClick={handleClickNext}><HiArrowSmRight /></button>
                 </div>
             </div>
