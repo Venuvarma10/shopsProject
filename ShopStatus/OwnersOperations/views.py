@@ -99,6 +99,15 @@ class ShopUpdateDestroyRetriveView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return ShopDetails.objects.filter(owner=self.request.user)
+    
+    def delete(self):
+        instance = self.get_object()
+        data=ShopDetails.objects.filter(owner=self.request.user)
+        data = ShopDetailsSerializer(data,many=True)
+        if data:
+            instance.delete()
+            return Response({"shops":data.data}, status=200)
+        return Response({"error":data.errors}, status=400)
    
 
 # class ShopImageListCreateView(generics.ListCreateAPIView):
@@ -107,7 +116,8 @@ class ShopUpdateDestroyRetriveView(generics.RetrieveUpdateDestroyAPIView):
 
     
 
-#     def create(self, request, *args, **kwargs):
+#     def create(self, request, *args, **kwargs):git log
+
 #         """Custom create method to allow multiple images upload"""
 #         shop_id = request.data.get('shop')
 #         images = request.FILES.getlist('images')
