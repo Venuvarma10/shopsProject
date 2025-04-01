@@ -6,6 +6,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const BannerSlider = ({images}) => {
+  console.log("Images in BannerSlider:", images); // Log the images prop
   return (
     <div className="w-100 mx-auto my-1 rounded-[15px] overflow-hidden shadow-md">
       <Swiper
