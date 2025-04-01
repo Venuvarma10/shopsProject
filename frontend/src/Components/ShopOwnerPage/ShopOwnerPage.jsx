@@ -35,7 +35,7 @@ const ShopOwnerPage = () => {
             const response = await fetch("http://127.0.0.1:8000/api/shop_create_view/", {
                 method: "GET",
                 headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQ4NTg1LCJpYXQiOjE3NDM0Mjk3ODUsImp0aSI6IjUxOGE3ZTBiZDRhZDQyMzI4YTIyYWQxYjk2ZmU4ZDAwIiwidXNlcl9pZCI6MX0.7LrEZOpue_DSHjr_MV37z_k0HoEZU4V6B41KfmgT_7I",
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
                 },
             });
             const data = await response.json();
@@ -56,7 +56,7 @@ const ShopOwnerPage = () => {
     return (
         <div className='flex justify-center items-center mt-5'>
             <div className='p-5 border'>
-                <BannerSlider images={shopDetails[activeSlide]?.images} />
+                {/* <BannerSlider images={shopDetails[activeSlide]?.images} /> */}
                 {shopDetails.length > 0 && (
                     <>
                         <div className='flex justify-between items-center mt-5'>

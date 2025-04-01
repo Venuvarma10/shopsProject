@@ -75,13 +75,8 @@ class ShopDetailsListCreateView(generics.ListCreateAPIView):
         if shop_serializer.is_valid():
             shop = shop_serializer.save(owner=self.request.user)  # Save shop details
              # Handle multiple image uploads
-<<<<<<< HEAD
             images = request.data['images']  
             print(images)
-=======
-            images = request.data['images'] 
-            print(images) 
->>>>>>> ad6d7113bc035c80e831f2057c4fd3975bdedd64
             for image in images:
                 ShopImages.objects.create(shop=shop, image=image)
             return Response({"message": "Shop and images added successfully"}, status=201)
