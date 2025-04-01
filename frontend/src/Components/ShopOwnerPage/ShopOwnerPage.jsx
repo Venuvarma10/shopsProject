@@ -35,7 +35,7 @@ const ShopOwnerPage = () => {
             const response = await fetch("http://127.0.0.1:8000/api/shop_create_view/", {
                 method: "GET",
                 headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQzNTA0LCJpYXQiOjE3NDM0MjQ3MDQsImp0aSI6IjY5MzBjZWNhYTQ4MDQ2YjI4YTRlYzQ4MTA4MmQ2OTczIiwidXNlcl9pZCI6MX0._2DlNyefzVG9tNjtxkls7nWEjkqOYYzXpuejrkoEhYM",
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNTQ4NTg1LCJpYXQiOjE3NDM0Mjk3ODUsImp0aSI6IjUxOGE3ZTBiZDRhZDQyMzI4YTIyYWQxYjk2ZmU4ZDAwIiwidXNlcl9pZCI6MX0.7LrEZOpue_DSHjr_MV37z_k0HoEZU4V6B41KfmgT_7I",
                 },
             });
             const data = await response.json();
@@ -51,7 +51,6 @@ const ShopOwnerPage = () => {
     useEffect(() => {
         getData();
     }, []);
-    console.log(shopDetails)
 
     return (
         <div className='flex justify-center items-center mt-5'>
