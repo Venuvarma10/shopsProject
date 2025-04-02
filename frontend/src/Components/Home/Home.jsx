@@ -13,7 +13,7 @@ const Home = () => {
 
     const filterShopsData=async()=>{
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/shop_update_mixin/${shopDetails[activeSlide].id}/`, {
+            const response = await fetch(`http://127.0.0.1:8000/users/search-shop/?category=${filter.category}&state=${filter.state}&city=${filter.city}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const Home = () => {
 
     const handleSubmit=(e)=>{
         e.preventDefault();
-        console.log(filter)
+        filterShopsData();
     }
     const getData=async()=>{
         try {
