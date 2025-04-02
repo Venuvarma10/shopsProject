@@ -47,13 +47,13 @@ class SearchByCategory(generics.ListAPIView):
         state = self.request.query_params.get('state',None)
         city = self.request.query_params.get('city', None)
         if category and state and city:
-            return queryset.filter(Q(category=category) & Q(city=city) & Q(state=state)) or queryset.filter(Q(category=category) | Q(state=state) | Q(city=city))
+            return queryset.filter(Q(category=category) & Q(city=city) & Q(state=state)) #or queryset.filter(Q(category=category) | Q(state=state) | Q(city=city))
         elif category and state:
-            return queryset.filter(Q(category=category) & Q(state=state)) or queryset.filter(Q(category=category) | Q(state=state))
+            return queryset.filter(Q(category=category) & Q(state=state)) #or queryset.filter(Q(category=category) | Q(state=state))
         elif category and city:
-            return queryset.filter(Q(category=category) & Q(city=city)) or queryset.filter(Q(category=category) | Q(city=city))
+            return queryset.filter(Q(category=category) & Q(city=city)) #or queryset.filter(Q(category=category) | Q(city=city))
         elif state and city:
-            return queryset.filter(Q(state=state) & Q(city=city)) or queryset.filter(Q(state=state) | Q(city=city))
+            return queryset.filter(Q(state=state) & Q(city=city)) #or queryset.filter(Q(state=state) | Q(city=city))
         elif category:
             return queryset.filter(category=category)
         elif state:
