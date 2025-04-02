@@ -28,6 +28,7 @@ class ShopDetailsView(generics.ListAPIView):
 class ShopRetriveView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     serializer_class = ShopDetailsSerializer
+    queryset = ShopDetails.objects.all()
     lookup_field = 'pk'
 
 
