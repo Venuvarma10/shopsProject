@@ -26,6 +26,7 @@ class ShopDetailsView(generics.ListAPIView):
     #         return Response({"message": "Shop and images added successfully"}, status=201)
     #     return Response(shop_serializer.errors, status=401)
 class ShopRetriveView(generics.RetrieveAPIView):
+    queryset = ShopDetails.objects.all()
     permission_classes = [AllowAny]
     serializer_class = ShopDetailsSerializer
     lookup_field = 'pk'
