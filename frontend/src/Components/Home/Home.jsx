@@ -4,9 +4,40 @@ import Filter from './Filter'
 import Header from './Header'
 
 const Home = () => {
-    
-    const arr=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
     const [shopsData,setShopsData]=useState([]);
+    const [filter, setFilter] = useState({
+        category:"",
+        state:"",
+        city:""
+    });
+
+    const filterShopsData=async()=>{
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/shop_update_mixin/${shopDetails[activeSlide].id}/`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.details);
+            }
+            // Update state with the new list of shops
+            console.log(data);
+        } catch (error) {
+            console.error("Error fetching data:", error.message);
+        }
+    }
+    
+    const handleChange=(e)=>{
+        setFilter({...filter,[e.target.name]:e.target.value})
+    }
+
+    const handleSubmit=(e)=>{
+        e.preventDefault();
+        console.log(filter)
+    }
     const getData=async()=>{
         try {
             const token = localStorage.getItem("token"); // Secure token retrieval
@@ -26,14 +57,12 @@ const Home = () => {
     useEffect(()=>{
         getData()
     },[])
-
-    console.log(shopsData);
     
   return (
     <>
     <Header />
     <div className='w-[100%] p-8 mt-15'>
-        <div className='fixed top-25'>
+        <div className='fixed top-25' onChange={handleChange} onSubmit={handleSubmit}>
             <Filter />
         </div>
         <div className='flex justify-end'>

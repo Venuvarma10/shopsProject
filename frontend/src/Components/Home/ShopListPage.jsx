@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from 'react'
-import { assets } from '../../assets/assets'
 import ToastMessage from '../Toasts/ToastMessage';
 import { IoLocation } from "react-icons/io5";
 import { FaClock } from "react-icons/fa6";
 
 const ShopListPage = ({data}) => {
-    const {shopimg}=assets;
     const [toast,setToast]=useState(false);
     const [message,setMessage]=useState('Close');
-    const handleClick=()=>{
-        setToast(true);
+    const getShopStatus=async()=> {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/users/single_shop/${data.id}/`);
+            const shopData = await response.json(); // Renamed variable to shopData
+            if (!response.ok) {
+                throw new Error(shopData.details);
+            }
+            // Update state with the new list of shops
+            console.log(shopData);
+            setToast(true);
+            setMessage(shopData.Status?"Opened":"Closed");
+        } catch (error) {
+            console.error("Error fetching data:", error.message);
+        }
     }
-    useEffect(()=>{
-        setTimeout(()=>{
+    const handleClick=()=> {
+        getShopStatus();  
+    }
+    useEffect(()=> {
+        setTimeout(()=> {
             setToast(false);
         },800)
     },[toast])
-    console.log()
   return (
     <>
         {toast && <ToastMessage message={message}/>}
@@ -37,4 +49,4 @@ const ShopListPage = ({data}) => {
   )
 }
 
-export default ShopListPage
+export default ShopListPage;
