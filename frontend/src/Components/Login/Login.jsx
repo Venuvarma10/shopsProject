@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import bg from "../../assets/bg.jpg"
 const Login = () => {
   const navigate=useNavigate();
   const [formData,setFormData]=useState({
@@ -58,15 +59,17 @@ const Login = () => {
   }
 
   return (
-    <div className='flex flex-col justify-center items-center w-full h-screen '>
-        <div className='border-1 rounded-[10px] text-center p-9'>
-          <h2 className='text-[28px] text-blue-700 font-bold mt-4'>Login</h2>
+    <div className="relative flex flex-col justify-center items-center w-full h-screen" style={{ backgroundImage: `url(${bg})` }}>
+      <div className="absolute inset-0 backdrop-blur-[2px] flex flex-col justify-center items-center w-full h-screen">
+        <div className='relative z-10 border-none shadow-lg shadow-[rgba(187,51,255,0.5)] rounded-[10px] text-center p-9 bg-[#fff] opacity-85'>
+          <h2 className='text-[28px] text-[#bb33ff] font-bold mt-4'>Login</h2>
           <form onSubmit={handleSubmit} onChange={handleChange}>
-            <input type='number' placeholder='Mobile number' className='input-auth' name='mobileNumber' />
+            <input type='number' placeholder='Mobile number' className='input-auth ' name='mobileNumber' />
             <input type="password" placeholder='Password'  className='input-auth' name='password'/>
             <button type="submit" className='submit-button'>Submit</button>
           </form>
-          <p className="p text-start px-3">Don't have an account?&nbsp;<NavLink to={"/owners/register"} className="text-amber-900">Register</NavLink></p>
+          <p className="p text-start px-3">Don't have an account?&nbsp;<NavLink to={"/owners/register"} className="text-blue-900">Register</NavLink></p>
+        </div>
         </div>
       </div>
   )

@@ -108,7 +108,7 @@ const ShopRegister = () => {
   return (
     <div className='flex flex-col justify-center items-center w-full my-10'>
         <div className='border-1 rounded-[10px] text-center p-10'>
-          <h2 className='text-[28px] text-blue-700 font-bold mt-4'>Shop Register</h2>
+          <h2 className='text-[28px] text-[#bb33ff] font-bold mt-4'>Shop Register</h2>
           <form onSubmit={handleSubmit} onChange={handleChange} >
             {slides[activeSlide]}
             <div className='flex justify-center items-center mb-4'>

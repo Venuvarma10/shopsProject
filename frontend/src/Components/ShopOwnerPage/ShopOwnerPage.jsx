@@ -5,6 +5,9 @@ import BannerSlider from "./BannerSlider.jsx";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { AiOutlineDelete } from "react-icons/ai";
+import { FiEdit2 } from "react-icons/fi";
+
 
 const ShopOwnerPage = () => {
     const navigate=useNavigate();
@@ -161,19 +164,19 @@ const ShopOwnerPage = () => {
     }
     return (
         <>
-           {shopDetails.length && <div className='flex justify-center items-center mt-5'>
-                <div className='p-5 border'>
+           {shopDetails.length && <div className={`flex justify-center items-center mt-5`}>
+                <div className={`p-5 border-none rounded-[10px] ${shopDetails[activeSlide]?.Status ? "shadow-lg shadow-green-900" : "shadow-lg shadow-red-900"}`}>
                     {shopDetails[activeSlide]?.images && <BannerSlider images={shopDetails[activeSlide].images} />}
                     {shopDetails.length > 0 && (
                         <>
                             <div className='flex justify-between items-center mt-5'>
                                 <p className='text-2xl font-bold'>{shopDetails[activeSlide]?.shopName}</p>
-                                <div className='flex items-center justify-between w-[35%]'>
-                                    <button className='edit-delete' onClick={handleEdit}>Edit</button>
-                                    <button className='edit-delete' onClick={handleDelete}>Delete</button>
+                                <div className='flex items-center justify-between w-[20%]'>
+                                    <button className='edit-delete hover:text-red-400' onClick={handleEdit}><FiEdit2/></button>
+                                    <button className='edit-delete ' onClick={handleDelete}><AiOutlineDelete /></button>
                                 </div>
                             </div>
-                            <p className='p font-bold'>{shopDetails[activeSlide]?.owner_name}</p>
+                            <p className='p font-semibold'>{shopDetails[activeSlide]?.owner_name}</p>
                             <p className='p w-100'>
                                 <IoLocation className='inline pr-1 text-2xl relative bottom-0.5' />
                                 {shopDetails[activeSlide]?.address}, {shopDetails[activeSlide]?.city}, {shopDetails[activeSlide]?.state}, {shopDetails[activeSlide]?.country}, {shopDetails[activeSlide]?.pincode}
@@ -186,13 +189,13 @@ const ShopOwnerPage = () => {
                     )}
 
                     <div className='flex justify-between items-center mt-8'>
-                        <button className={`edit-delete text-[26px] ${shopDetails.length === 1 || activeSlide === 0 ? "invisible" : "block"}`} name="prev" onClick={handleClickPrev}><HiArrowSmLeft /></button>
-                        <button className='edit-delete' name='open/close' onClick={handleClick}>{shopDetails[activeSlide]?.Status ? "Close" : "Open"}</button>
-                        <button className={`edit-delete text-[26px] ${activeSlide === shopDetails.length - 1 ? "invisible" : "block"}`} name="next" onClick={handleClickNext}><HiArrowSmRight /></button>
+                        <button className={` text-[38px] cursor-pointer ${shopDetails.length === 1 || activeSlide === 0 ? "invisible" : "block"}`} name="prev" onClick={handleClickPrev}><HiArrowSmLeft /></button>
+                        <button className={`buttons text-[#fff] ${shopDetails[activeSlide]?.Status ? "bg-red-500" : "bg-green-500"}`} name='open/close' onClick={handleClick}>{shopDetails[activeSlide]?.Status ? "Close" : "Open"}</button>
+                        <button className={`text-[38px] cursor-pointer ${activeSlide === shopDetails.length - 1 ? "invisible" : "block"}`} name="next" onClick={handleClickNext}><HiArrowSmRight /></button>
                     </div>
                 </div>
             </div> }
-            <div className="flex justify-center items-center mt-10"><button className="edit-delete" onClick={addShop}>Add Shop +</button></div>
+            <div className="flex justify-center items-center mt-10"><button className="submit-button " onClick={addShop}>Add Shop +</button></div>
         </>
     );
 };

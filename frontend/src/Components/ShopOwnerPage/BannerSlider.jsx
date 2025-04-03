@@ -21,7 +21,7 @@ const BannerSlider = ({images}) => {
         {images?.length > 0 ? (
           images.map((img, index) => (
             <SwiperSlide key={index}>
-              <img src={img.image} alt={`Banner ${index + 1}`} className="w-full  object-cover rounded-[10px]" />
+              <img src={img.image} alt={`Banner ${index + 1}`} className="w-100 h-80  object-cover rounded-[10px]" />
             </SwiperSlide>
           ))
         ) : (

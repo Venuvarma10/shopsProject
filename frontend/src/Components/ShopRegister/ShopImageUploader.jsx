@@ -26,7 +26,7 @@ const ShopImageUploader = () => {
         />
         <label
           htmlFor="shop-images"
-          className="cursor-pointer border-2 border-dashed border-gray-400 p-4 rounded-lg w-full text-gray-600 hover:border-blue-500 transition"
+          className="cursor-pointer border-2 border-dashed border-[#bb33ff] p-4 rounded-lg w-full text-gray-600 hover:border-blue-500 transition"
         >
           Click to Upload Images
         </label>
