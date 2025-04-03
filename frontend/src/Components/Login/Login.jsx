@@ -1,6 +1,7 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 const Login = () => {
+  const navigate=useNavigate();
   const [formData,setFormData]=useState({
     mobileNumber:"",
     password:""
@@ -34,7 +35,9 @@ const Login = () => {
         
         throw new Error(new_data1.detail);
       }
-      console.log(new_data1.access);
+      localStorage.setItem("refreshToken",new_data1.refresh)
+      localStorage.setItem("accessToken",new_data1.access)
+      navigate("/owners/shopowner")
     } catch (error) {
         alert(error.message);
     }

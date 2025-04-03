@@ -3,8 +3,11 @@ import { IoLocation } from "react-icons/io5";
 import { FaClock } from "react-icons/fa6";
 import BannerSlider from "./BannerSlider.jsx";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const ShopOwnerPage = () => {
+    const navigate=useNavigate();
     const [shopDetails, setShopDetails] = useState([]);
     const [activeSlide, setActiveSlide] = useState(0);    
 
@@ -22,11 +25,11 @@ const ShopOwnerPage = () => {
 
     const getData = async () => {
         try {
-            const token = localStorage.getItem("token"); // Secure token retrieval
+            const token = localStorage.getItem("accessToken"); // Secure token retrieval
             const response = await fetch("http://127.0.0.1:8000/api/shop_create_view/", {
                 method: "GET",
                 headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
+                    "Authorization": `Bearer ${token}`,
                 },
             });
             const data = await response.json();
@@ -45,12 +48,12 @@ const ShopOwnerPage = () => {
 
     const updateStatus = async () => {
         try {
-            const token = localStorage.getItem("token"); // Secure token retrieval
+            const token = localStorage.getItem("accessToken"); // Secure token retrieval
             const response = await fetch(`http://127.0.0.1:8000/api/shop_update_mixin/${shopDetails[activeSlide].id}/`, {
                 method: "PATCH",
                 headers: {
                     'Content-Type': 'application/json',
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({ Status: !shopDetails[activeSlide].Status }),
             });
@@ -74,11 +77,11 @@ const ShopOwnerPage = () => {
 
     const deleteShop = async () => {
         try {
-            const token = localStorage.getItem("token"); // Secure token retrieval
+            const token = localStorage.getItem("accessToken"); // Secure token retrieval
             const response = await fetch(`http://127.0.0.1:8000/api/shop_update_mixin/${shopDetails[activeSlide].id}/`, {
                 method: "DELETE",
                 headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
+                    "Authorization": `Bearer ${token}`,
                 },
             });
             const data = await response.json();
@@ -93,44 +96,104 @@ const ShopOwnerPage = () => {
             console.error("Error fetching data:", error.message);
         }
     };
+    let db;
+
+    const openDatabase = () => {
+        return new Promise((resolve, reject) => {
+            if (db) {
+                resolve(db); // If already opened, return it
+                return;
+            }
+    
+            const request = indexedDB.open("MyDatabase", 1);
+    
+            request.onsuccess = (event) => {
+                db = event.target.result;
+                console.log("Database opened successfully:", db);
+                resolve(db);
+            };
+    
+            request.onerror = (event) => {
+                console.error("Error opening database:", event.target.error);
+                reject(event.target.error);
+            };
+    
+            request.onupgradeneeded = (event) => {
+                db = event.target.result;
+                if (!db.objectStoreNames.contains("EditData")) {
+                    db.createObjectStore("EditData", { keyPath: "Id" });
+                    console.log("Object store 'EditData' created.");
+                }
+            };
+        });
+    };
+    
+    const addDataWithExpiry = (uniqueId, data) => {
+        openDatabase().then((dbInstance) => {
+            let transaction = dbInstance.transaction("EditData", "readwrite");
+            let store = transaction.objectStore("EditData");
+    
+            const expiryTime = Date.now() + 30 * 60 * 1000; // 30 min expiry
+            let record = { id: uniqueId, ...data, expiryTime };
+    
+            let request = store.put(record);
+    
+            request.onsuccess = () => console.log("Data added with 30 min expiry:", record);
+            request.onerror = (event) => console.error("Error adding data:", event.target.error);
+        }).catch((error) => {
+            console.error("Database not initialized:", error);
+        });
+    };
+    
+
+    const handleEdit=()=>{
+        console.log(shopDetails[activeSlide])
+        addDataWithExpiry(1, shopDetails[activeSlide]);
+        navigate(`/owners/shopEdit/${shopDetails[activeSlide].id}`)
+    }
 
     useEffect(() => {
         getData();
     }, []);
 
-
+    const addShop=()=>{
+        navigate("/owners/shopregister")
+    }
     return (
-        <div className='flex justify-center items-center mt-5'>
-            <div className='p-5 border'>
-                {shopDetails[activeSlide]?.images && <BannerSlider images={shopDetails[activeSlide].images} />}
-                {shopDetails.length > 0 && (
-                    <>
-                        <div className='flex justify-between items-center mt-5'>
-                            <p className='text-2xl font-bold'>{shopDetails[activeSlide]?.shopName}</p>
-                            <div className='flex items-center justify-between w-[35%]'>
-                                <button className='edit-delete' >Edit</button>
-                                <button className='edit-delete' onClick={handleDelete}>Delete</button>
+        <>
+           {shopDetails.length && <div className='flex justify-center items-center mt-5'>
+                <div className='p-5 border'>
+                    {shopDetails[activeSlide]?.images && <BannerSlider images={shopDetails[activeSlide].images} />}
+                    {shopDetails.length > 0 && (
+                        <>
+                            <div className='flex justify-between items-center mt-5'>
+                                <p className='text-2xl font-bold'>{shopDetails[activeSlide]?.shopName}</p>
+                                <div className='flex items-center justify-between w-[35%]'>
+                                    <button className='edit-delete' onClick={handleEdit}>Edit</button>
+                                    <button className='edit-delete' onClick={handleDelete}>Delete</button>
+                                </div>
                             </div>
-                        </div>
-                        <p className='p font-bold'>{shopDetails[activeSlide]?.owner_name}</p>
-                        <p className='p w-100'>
-                            <IoLocation className='inline pr-1 text-2xl relative bottom-0.5' />
-                            {shopDetails[activeSlide]?.address}, {shopDetails[activeSlide]?.city}, {shopDetails[activeSlide]?.state}, {shopDetails[activeSlide]?.country}, {shopDetails[activeSlide]?.pincode}
-                        </p>
-                        <p className='p'>
-                            <FaClock className='inline pr-1 text-[22px] relative bottom-0.5' />
-                            {shopDetails[activeSlide]?.openingTime} - {shopDetails[activeSlide]?.closingTime}
-                        </p>
-                    </>
-                )}
+                            <p className='p font-bold'>{shopDetails[activeSlide]?.owner_name}</p>
+                            <p className='p w-100'>
+                                <IoLocation className='inline pr-1 text-2xl relative bottom-0.5' />
+                                {shopDetails[activeSlide]?.address}, {shopDetails[activeSlide]?.city}, {shopDetails[activeSlide]?.state}, {shopDetails[activeSlide]?.country}, {shopDetails[activeSlide]?.pincode}
+                            </p>
+                            <p className='p'>
+                                <FaClock className='inline pr-1 text-[22px] relative bottom-0.5' />
+                                {shopDetails[activeSlide]?.openingTime} - {shopDetails[activeSlide]?.closingTime}
+                            </p>
+                        </>
+                    )}
 
-                <div className='flex justify-between items-center mt-8'>
-                    <button className={`edit-delete text-[26px] ${shopDetails.length === 1 || activeSlide === 0 ? "invisible" : "block"}`} name="prev" onClick={handleClickPrev}><HiArrowSmLeft /></button>
-                    <button className='edit-delete' name='open/close' onClick={handleClick}>{shopDetails[activeSlide]?.Status ? "Close" : "Open"}</button>
-                    <button className={`edit-delete text-[26px] ${activeSlide === shopDetails.length - 1 ? "invisible" : "block"}`} name="next" onClick={handleClickNext}><HiArrowSmRight /></button>
+                    <div className='flex justify-between items-center mt-8'>
+                        <button className={`edit-delete text-[26px] ${shopDetails.length === 1 || activeSlide === 0 ? "invisible" : "block"}`} name="prev" onClick={handleClickPrev}><HiArrowSmLeft /></button>
+                        <button className='edit-delete' name='open/close' onClick={handleClick}>{shopDetails[activeSlide]?.Status ? "Close" : "Open"}</button>
+                        <button className={`edit-delete text-[26px] ${activeSlide === shopDetails.length - 1 ? "invisible" : "block"}`} name="next" onClick={handleClickNext}><HiArrowSmRight /></button>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </div> }
+            <div className="flex justify-center items-center mt-10"><button className="edit-delete" onClick={addShop}>Add Shop +</button></div>
+        </>
     );
 };
 

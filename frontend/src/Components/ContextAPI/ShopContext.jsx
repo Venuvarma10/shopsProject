@@ -1,6 +1,7 @@
 import React, { createContext,useState } from 'react';
 const ShopContext = createContext();
 const ShopProvider = ({ children }) => {
+    
     const [shopForm,setShopForm] = useState({
         shopName:"",
         category:"",

@@ -24,7 +24,7 @@ const Home = () => {
                 throw new Error(data.details);
             }
             // Update state with the new list of shops
-            console.log(data);
+            setShopsData([...data]);
         } catch (error) {
             console.error("Error fetching data:", error.message);
         }
@@ -59,17 +59,18 @@ const Home = () => {
     },[])
     
   return (
+    
     <>
     <Header />
     <div className='w-[100%] p-8 mt-15'>
         <div className='fixed top-25' onChange={handleChange} onSubmit={handleSubmit}>
             <Filter />
         </div>
-        <div className='flex justify-end'>
+        {shopsData.length?<div className='flex justify-end'>
             <div className="flex flex-col justify-center w-[65%] space-y-5 scroll-auto">
                 {shopsData.map((val,ind)=><ShopListPage key={ind} data={val}/>)}
             </div>
-        </div>
+        </div>:<div className='flex justify-center text-2xl items-center'><p>No shops Found</p></div>}
     </div>
     </>
   )

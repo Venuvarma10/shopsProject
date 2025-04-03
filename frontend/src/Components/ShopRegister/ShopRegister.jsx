@@ -3,7 +3,9 @@ import FirstSlide from './Slides/FirstSlide';
 import SecondSlide from './Slides/SecondSlide';
 import ThirdSlide from './Slides/ThirdSlide';
 import { ShopContext } from '../ContextAPI/ShopContext';
+import { useNavigate } from 'react-router-dom';
 const ShopRegister = () => {
+    const navigate=useNavigate();
     const [activeSlide, setActiveSlide] = useState(0);
     const {shopForm,setShopForm}=useContext(ShopContext);
 
@@ -82,11 +84,11 @@ const ShopRegister = () => {
           console.log(value);
         })
         try {
+          const token=localStorage.getItem("accessToken")
           const response = await fetch("http://127.0.0.1:8000/api/shop_create_view/", {
             method: "POST",
             headers:{
-              // "Authorization": "Bearer "+localStorage.getItem("token")
-              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjIxNDAxLCJpYXQiOjE3NDM1MDI2MDEsImp0aSI6ImFmODIyYTBhM2RiMzQzNWQ4OTRjOGZhODJkZGQzODk4IiwidXNlcl9pZCI6M30.BDC7bWWdpkgKs1GAPGRJGTI_AnhcgtGPgRjCuhMIjMc",
+              "Authorization": `Bearer ${token}`,
             },
             body: formData,
           });
@@ -95,6 +97,7 @@ const ShopRegister = () => {
           if (!response.ok) {
             throw new Error(data.details);
           } 
+          navigate("/owners/shopowner")
         } catch (error) {
           console.error("Error submitting form:", error.message);
         }

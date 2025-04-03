@@ -1,8 +1,8 @@
 import React,{useState} from 'react'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  
+  const navigate=useNavigate();
   const firstNameRegex=/^[A-Za-z][A-Za-z'-]{1,49}$/; //Only letters, hyphens, and apostrophes; 2-50 characters
   const lastNameRegex=/^[A-Za-z][A-Za-z'-]{1,49}$/; //Only letters, hyphens, and apostrophes; 2-50 characters
   const mobileNumberRegex=/^[6789]\d{9}$/;  //Must be 10 digits, starting with 6, 7, 8, or 9.
@@ -67,8 +67,9 @@ const Register = () => {
         
         throw new Error(new_data1.detail);
       }
-      console.log(new_data1);
-      return true;
+      localStorage.setItem("refreshToken",new_data1.refresh)
+      localStorage.setItem("accessToken",new_data1.access)
+      navigate("/owners/shopowner")
     } catch (error) {
         alert(error.message);
     }

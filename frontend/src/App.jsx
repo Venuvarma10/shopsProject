@@ -4,6 +4,7 @@ import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
 import ShopOwnerPage from './Components/ShopOwnerPage/ShopOwnerPage'
 import ShopRegister from './Components/ShopRegister/ShopRegister'
+import ShopEditPage from './Components/ShopOwnerPage/ShopEditPage';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
             <Route path="/owners/register" element={<Register />} />
             <Route path="/owners/shopowner" element={<ShopOwnerPage />} />
             <Route path="/owners/shopregister" element={<ShopRegister />} />
+            <Route path="/owners/shopEdit/:id" element={<ShopEditPage />} />
           </Routes>
     </Router>
     </>
